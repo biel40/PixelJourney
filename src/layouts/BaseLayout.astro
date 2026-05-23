@@ -1,0 +1,37 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description: string;
+  ogImage?: string;
+  canonical?: string;
+}
+
+const {
+  title,
+  description,
+  ogImage = '/og-default.jpg',
+  canonical = Astro.url.href,
+} = Astro.props;
+---
+
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title} — PixelJourney</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <slot name="head" />
+  </head>
+  <body class="bg-neutral-950 text-neutral-100 antialiased">
+    <slot />
+  </body>
+</html>

@@ -1,17 +1,33 @@
 ---
-
+export const prerender = true;
+import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<BaseLayout
+  title="PixelJourney"
+  description="Fotografía móvil — momentos capturados con dispositivos del día a día."
+>
+  <main class="min-h-screen flex flex-col items-center justify-center px-6 py-24 gap-6 text-center">
+    <p class="text-xs font-mono tracking-[0.3em] uppercase text-neutral-500">
+      Fotografía móvil
+    </p>
+
+    <h1 class="text-6xl font-bold tracking-tight text-white">
+      Pixel<span class="text-neutral-500">Journey</span>
+    </h1>
+
+    <p class="text-base text-neutral-400 max-w-sm leading-relaxed">
+      Momentos reales capturados con el dispositivo que siempre llevo encima.
+    </p>
+
+    <a
+      href="/gallery"
+      class="mt-4 inline-flex items-center gap-2 rounded-full border border-neutral-700 px-7 py-3 text-sm font-medium text-neutral-200 hover:border-neutral-400 hover:text-white transition-colors"
+    >
+      Ver galería
+      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+      </svg>
+    </a>
+  </main>
+</BaseLayout>
