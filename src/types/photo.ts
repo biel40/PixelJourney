@@ -1,3 +1,5 @@
+import type { ImageMetadata } from 'astro';
+
 export interface Photo {
   id: string;
   storagePath: string;       // e.g. "uploads/abc-123" — base path, sin trailing slash
@@ -12,6 +14,17 @@ export interface Photo {
   width: number | null;
   height: number | null;
   createdAt: Date;
+}
+
+// Tipo de vista que consume la galería. Desacopla el render del origen de
+// datos: hoy se alimenta de imágenes locales (astro:assets), mañana podrá
+// mapearse desde un `Photo` de Supabase sin tocar los componentes.
+export interface GalleryPhoto {
+  id: string;
+  src: ImageMetadata;        // resultado del import de astro:assets (local)
+  alt: string;
+  album: string;             // slug del álbum (nombre de la subcarpeta)
+  takenAt: Date | null;
 }
 
 // Fila raw de Supabase — snake_case de la DB

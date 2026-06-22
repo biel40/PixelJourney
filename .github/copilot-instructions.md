@@ -631,3 +631,5 @@ const {
 - ❌ Do not write Supabase queries inline in `.astro` page frontmatter. Move them to `src/lib/photos.ts`.
 - ❌ Do not expose `SUPABASE_SERVICE_ROLE_KEY` to the client bundle under any circumstances.
 - ❌ Do not add GSAP, Three.js, or heavy animation libraries. This is a photo portfolio, not a creative experiment.
+
+Images are stored within the assets folder of the project, and are referenced in the codebase via their relative paths. The project uses Supabase Storage for photo storage, and all public URLs are derived from the `storage_path` field in the database.
