@@ -3,12 +3,12 @@ import type { GalleryPhoto } from '../types/photo';
 // ─────────────────────────────────────────────────────────────────────────────
 // Fuente de datos de la galería — FASE LOCAL (temporal, sin Supabase)
 //
-// Lee las imágenes de `src/assets/photos/**` y las expone como `GalleryPhoto[]`.
+// Lee las imágenes de `assets/photos/**` (raíz del proyecto) y las expone como `GalleryPhoto[]`.
 // Astro las optimiza en build (resize + webp) gracias a astro:assets.
 //
 // Convención de álbumes: el nombre de la SUBCARPETA es el slug del álbum.
-//   src/assets/photos/PXL_xxx.jpg            -> album "general"
-//   src/assets/photos/street/PXL_xxx.jpg     -> album "street"
+//   assets/photos/PXL_xxx.jpg            -> album "general"
+//   assets/photos/street/PXL_xxx.jpg     -> album "street"
 //
 // MIGRACIÓN A SUPABASE: cuando la DB esté lista, este es el ÚNICO sitio a tocar.
 // Basta con devolver aquí los datos de Supabase mapeados a `GalleryPhoto`
@@ -17,7 +17,7 @@ import type { GalleryPhoto } from '../types/photo';
 
 // import.meta.glob resuelve en build todos los imports de astro:assets.
 const modules = import.meta.glob<{ default: ImageMetadata }>(
-  '../assets/photos/**/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}',
+  '../../assets/photos/**/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}',
   { eager: true },
 );
 

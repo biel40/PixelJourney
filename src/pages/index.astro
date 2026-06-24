@@ -10,14 +10,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   <main
     class="relative min-h-screen overflow-hidden flex flex-col items-center justify-center px-6 py-24 gap-6 text-center"
   >
-    {/* Capa decorativa de fondo — puramente estética, sin interacción */}
     <div class="pointer-events-none absolute inset-0 -z-10" aria-hidden="true">
-      {/* Glow ambiental que "respira" lentamente */}
       <div class="aurora aurora-a"></div>
       <div class="aurora aurora-b"></div>
-      {/* Rejilla técnica muy sutil, desvanecida hacia los bordes */}
       <div class="grid-overlay"></div>
-      {/* Viñeta para anclar el contenido y dar profundidad */}
       <div
         class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_55%,rgba(10,10,10,0.9)_100%)]"
       >
@@ -74,32 +70,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 </BaseLayout>
 
 <style>
-  /* ---- Revelado escalonado de entrada ---- */
-  .reveal {
-    opacity: 0;
-    animation: reveal 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-  }
-
-  @keyframes reveal {
-    from {
-      opacity: 0;
-      transform: translateY(18px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  /* ---- Título con degradado y brillo sutil ---- */
-  .title-gradient {
-    background: linear-gradient(180deg, #ffffff 0%, #ffffff 55%, #a3a3a3 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-  }
-
-  /* ---- Glow ambiental que respira ---- */
   .aurora {
     position: absolute;
     border-radius: 9999px;
@@ -153,7 +123,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     }
   }
 
-  /* ---- Rejilla técnica desvanecida ---- */
   .grid-overlay {
     position: absolute;
     inset: 0;
@@ -169,7 +138,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     );
   }
 
-  /* ---- CTA: relleno animado al pasar el ratón ---- */
   .cta {
     position: relative;
     overflow: hidden;
@@ -196,10 +164,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .reveal {
-      animation: none;
-      opacity: 1;
-    }
     .aurora {
       animation: none;
     }

@@ -134,6 +134,15 @@ src/
 - Props typed via interface in the frontmatter.
 - Use `class:list` for conditional classes. No inline `style` for layout.
 
+### Styles (`src/styles/global.css` + scoped `<style>`)
+- Layout/spacing/color → Tailwind utility classes in the markup. No custom CSS for what a utility already covers.
+- Custom CSS goes in two places only:
+  - **Shared primitives** (used on 2+ pages: animation utilities, brand gradients, reduced-motion base) → `src/styles/global.css`. These are design-system level and intentionally global.
+  - **Page/component-specific styles** (decorative backgrounds, one-off keyframes) → scoped `<style>` in that `.astro` file.
+- NEVER duplicate a CSS rule across pages. If a rule appears in 2+ files, promote it to `global.css`.
+- Current shared primitives in `global.css`: `.reveal` (+ `@keyframes reveal`), `.title-gradient`, and the base `prefers-reduced-motion` reset for `.reveal`.
+- Every page that animates MUST respect `@media (prefers-reduced-motion: reduce)` for its own scoped animations.
+
 ### Preact Islands
 - Only for components that REQUIRE client-side interactivity (e.g., Lightbox).
 - Use `client:visible` or `client:idle`. NEVER `client:load` unless critical.

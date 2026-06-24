@@ -1,1 +1,40 @@
 @import "tailwindcss";
+
+/* =========================================================================
+   Primitivas de animación e identidad visual compartidas entre páginas.
+   Solo va aquí lo que se reutiliza en más de una página. Lo específico de
+   una página permanece scoped en su propio componente .astro.
+   ========================================================================= */
+
+/* Revelado escalonado al cargar — se combina con `style="animation-delay"`. */
+.reveal {
+  opacity: 0;
+  animation: reveal 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes reveal {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Título con degradado vertical — identidad visual de PixelJourney. */
+.title-gradient {
+  background: linear-gradient(180deg, #ffffff 0%, #ffffff 55%, #a3a3a3 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Accesibilidad: anula el revelado para quien prefiere menos movimiento. */
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    animation: none;
+    opacity: 1;
+  }
+}

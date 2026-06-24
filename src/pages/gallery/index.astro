@@ -120,30 +120,8 @@ const largeImages = await Promise.all(
 </BaseLayout>
 
 <style>
-  /* ---- Revelado escalonado de la cabecera (al cargar) ---- */
-  .reveal {
-    opacity: 0;
-    animation: reveal 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-  }
-
-  @keyframes reveal {
-    from {
-      opacity: 0;
-      transform: translateY(18px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  /* ---- Título con degradado, coherente con la home ---- */
-  .title-gradient {
-    background: linear-gradient(180deg, #ffffff 0%, #ffffff 55%, #a3a3a3 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-  }
+  /* Estilos exclusivos de la galería. Las primitivas compartidas
+     (.reveal, .title-gradient) viven en src/styles/global.css. */
 
   /* ---- Glow ambiental detrás de la cabecera ---- */
   .gallery-glow {
@@ -190,12 +168,8 @@ const largeImages = await Promise.all(
 
   /* ---- Accesibilidad: respeta a quien prefiere menos movimiento ---- */
   @media (prefers-reduced-motion: reduce) {
-    .reveal,
     .gallery-glow {
       animation: none;
-    }
-    .reveal {
-      opacity: 1;
     }
     .photo-reveal {
       opacity: 1;
