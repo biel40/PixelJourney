@@ -5,7 +5,6 @@ import { getGalleryPhotos } from '../../lib/gallery';
 
 const photos = await getGalleryPhotos();
 
-// Versión grande de cada foto para el lightbox (se carga solo al ampliar).
 const largeImages = await Promise.all(
   photos.map((photo) =>
     getImage({ src: photo.src, width: 1600, format: 'webp' }),
@@ -18,7 +17,6 @@ const largeImages = await Promise.all(
   description="Colección de fotografías móviles capturadas en el día a día."
 >
   <main class="relative mx-auto max-w-6xl px-6 py-16">
-    {/* Glow ambiental detrás de la cabecera — coherente con la home */}
     <div
       class="pointer-events-none absolute inset-x-0 top-0 -z-10 h-115 overflow-hidden"
       aria-hidden="true"
@@ -42,14 +40,14 @@ const largeImages = await Promise.all(
         style="animation-delay: 140ms"
       >
         <span class="inline-block h-px w-8 bg-neutral-700"></span>
-        Galería
+        Galería interactiva
         <span class="inline-block h-px w-8 bg-neutral-700"></span>
       </p>
       <h1
         class="reveal mt-2 text-4xl font-bold tracking-tight"
         style="animation-delay: 220ms"
       >
-        <span class="title-gradient">Momentos</span>
+        <span class="title-gradient">Los mejores disparos</span>
       </h1>
       <p
         class="reveal mt-3 text-sm text-neutral-400"
