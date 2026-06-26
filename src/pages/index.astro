@@ -1,6 +1,6 @@
 ---
 export const prerender = true;
-import BaseLayout from '../layouts/BaseLayout.astro';
+import BaseLayout from "../layouts/BaseLayout.astro";
 ---
 
 <BaseLayout
@@ -27,27 +27,52 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       style="animation-delay: 80ms"
     >
       <span class="inline-block h-px w-8 bg-neutral-700"></span>
-      Fotografía móvil
+      Galería de Fotografía móvil
       <span class="inline-block h-px w-8 bg-neutral-700"></span>
     </p>
 
     <h1
-      class="title-glow text-6xl sm:text-7xl font-bold tracking-tight"
+      class="title-glow text-5xl sm:text-6xl md:text-7xl font-bold tracking-tight"
     >
-      <span class="title-gradient word-pixel">Pixel</span><span class="title-accent word-journey">Journey</span>
+      <span class="title-gradient word-pixel">Pixel</span><span
+        class="title-accent word-journey">Journey</span
+      >
     </h1>
 
     <p
       class="reveal text-base text-neutral-400 max-w-sm leading-relaxed text-balance"
       style="animation-delay: 300ms"
     >
-      Momentos reales capturados con el dispositivo que siempre llevo encima.
+      Momentos totalmente reales, capturados instantáneamente con el dispositivo
+      que siempre me acompaña en mis aventuras.
+    </p>
+
+    <p
+      class="reveal text-xs font-mono tracking-[0.2em] uppercase text-neutral-600 flex items-center gap-2"
+      style="animation-delay: 360ms"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="12"
+        height="12"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
+        <circle cx="12" cy="17" r="1"></circle>
+      </svg>
+      All Photos shot on Google Pixel 10 Pro XL
     </p>
 
     <a
       href="/gallery"
       class="cta reveal group mt-4 inline-flex items-center gap-2 rounded-full border border-neutral-700 px-7 py-3 text-sm font-medium text-neutral-200 transition-colors duration-300 hover:border-neutral-400 hover:text-white"
-      style="animation-delay: 420ms"
+      style="animation-delay: 500ms"
     >
       Ver galería
       <svg
@@ -229,7 +254,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   .word-pixel {
     display: inline-block;
     opacity: 0;
-    animation: enter-pixel 1.50s cubic-bezier(0.16, 1, 0.3, 1) 160ms forwards;
+    animation: enter-pixel 1.5s cubic-bezier(0.16, 1, 0.3, 1) 160ms forwards;
   }
 
   .word-journey {
@@ -278,6 +303,38 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     .word-journey {
       animation: none;
       opacity: 1;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .aurora {
+      filter: blur(50px) saturate(1.2);
+    }
+
+    .aurora-a {
+      width: min(340px, 88vw);
+      height: min(340px, 88vw);
+    }
+
+    .aurora-b {
+      width: min(280px, 72vw);
+      height: min(280px, 72vw);
+      left: 8%;
+    }
+
+    .aurora-c {
+      width: min(260px, 67vw);
+      height: min(260px, 67vw);
+      right: -4%;
+    }
+
+    .aurora-d {
+      width: min(230px, 59vw);
+      height: min(230px, 59vw);
+    }
+
+    .grain {
+      animation: none;
     }
   }
 </style>
