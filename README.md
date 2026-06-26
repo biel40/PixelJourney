@@ -51,12 +51,3 @@ npm run dev       # Servidor local en localhost:4321
 npm run build     # Build de producción en ./dist/
 npm run preview   # Preview del build
 ```
-
-## Variables de entorno
-
-```
-SUPABASE_URL
-SUPABASE_ANON_KEY
-SUPABASE_SERVICE_ROLE_KEY   # Solo servidor — nunca exponer al cliente
-PUBLIC_SITE_URL
-```
