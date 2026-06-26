@@ -35,6 +35,9 @@ Photography portfolio built with Astro 6, Supabase Storage and Supabase DB. Phot
 **Data flow:** SSR page → `src/lib/photos.ts` → Supabase DB → derive URLs via `src/lib/storage.ts` → render.
 Admin: middleware checks `supabase.auth.getUser()` on every `/admin/*` request → redirect to `/admin/login` if unauthenticated.
 
+DO NOT USE COMMENTS; USE CLEAN CODE ALWAYS. If a function is unclear, rename it or break it into smaller functions. 
+If a component is unclear, split it into smaller components. If a page is unclear, move logic to `src/lib/` and/or `src/components/`.
+
 ---
 
 ## Database Schema

@@ -13,9 +13,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     <div class="pointer-events-none absolute inset-0 -z-10" aria-hidden="true">
       <div class="aurora aurora-a"></div>
       <div class="aurora aurora-b"></div>
-      <div class="grid-overlay"></div>
+      <div class="aurora aurora-c"></div>
+      <div class="aurora aurora-d"></div>
+      <div class="grain"></div>
       <div
-        class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_55%,rgba(10,10,10,0.9)_100%)]"
+        class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_60%,rgba(8,8,10,0.72)_100%)]"
       >
       </div>
     </div>
@@ -30,12 +32,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     </p>
 
     <h1
-      class="reveal text-6xl sm:text-7xl font-bold tracking-tight"
-      style="animation-delay: 180ms"
+      class="title-glow text-6xl sm:text-7xl font-bold tracking-tight"
     >
-      <span class="title-gradient">Pixel</span><span class="text-neutral-600"
-        >Journey</span
-      >
+      <span class="title-gradient word-pixel">Pixel</span><span class="title-accent word-journey">Journey</span>
     </h1>
 
     <p
@@ -73,69 +72,133 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   .aurora {
     position: absolute;
     border-radius: 9999px;
-    filter: blur(90px);
-    opacity: 0.5;
+    filter: blur(80px) saturate(1.4);
     will-change: transform, opacity;
+    mix-blend-mode: screen;
   }
 
   .aurora-a {
-    top: 12%;
+    top: 0%;
     left: 50%;
-    width: 480px;
-    height: 480px;
+    width: 680px;
+    height: 680px;
     transform: translateX(-50%);
     background: radial-gradient(
       circle,
-      rgba(120, 113, 108, 0.35),
-      transparent 70%
+      rgba(66, 133, 244, 0.95),
+      transparent 72%
     );
-    animation: breathe-a 12s ease-in-out infinite alternate;
+    animation: breathe-a 14s ease-in-out infinite alternate;
   }
 
   .aurora-b {
-    bottom: 8%;
-    left: 35%;
-    width: 360px;
-    height: 360px;
-    background: radial-gradient(circle, rgba(82, 82, 91, 0.3), transparent 70%);
-    animation: breathe-b 16s ease-in-out infinite alternate;
+    bottom: -4%;
+    left: 18%;
+    width: 560px;
+    height: 560px;
+    background: radial-gradient(
+      circle,
+      rgba(234, 67, 53, 0.9),
+      transparent 72%
+    );
+    animation: breathe-b 18s ease-in-out infinite alternate;
+  }
+
+  .aurora-c {
+    top: 28%;
+    right: 8%;
+    width: 520px;
+    height: 520px;
+    background: radial-gradient(
+      circle,
+      rgba(52, 168, 83, 0.9),
+      transparent 72%
+    );
+    animation: breathe-c 16s ease-in-out infinite alternate;
+  }
+
+  .aurora-d {
+    bottom: 4%;
+    right: 24%;
+    width: 460px;
+    height: 460px;
+    background: radial-gradient(
+      circle,
+      rgba(251, 188, 5, 0.85),
+      transparent 72%
+    );
+    animation: breathe-d 20s ease-in-out infinite alternate;
   }
 
   @keyframes breathe-a {
     from {
       transform: translateX(-50%) translateY(0) scale(1);
-      opacity: 0.4;
+      opacity: 0.85;
     }
     to {
-      transform: translateX(-50%) translateY(-24px) scale(1.12);
-      opacity: 0.6;
+      transform: translateX(-50%) translateY(-30px) scale(1.15);
+      opacity: 1;
     }
   }
 
   @keyframes breathe-b {
     from {
       transform: translate(0, 0) scale(1);
-      opacity: 0.3;
+      opacity: 0.8;
     }
     to {
-      transform: translate(40px, 20px) scale(1.18);
-      opacity: 0.5;
+      transform: translate(50px, 24px) scale(1.2);
+      opacity: 1;
     }
   }
 
-  .grid-overlay {
+  @keyframes breathe-c {
+    from {
+      transform: translate(0, 0) scale(1);
+      opacity: 0.75;
+    }
+    to {
+      transform: translate(-40px, -20px) scale(1.12);
+      opacity: 1;
+    }
+  }
+
+  @keyframes breathe-d {
+    from {
+      transform: translate(0, 0) scale(1);
+      opacity: 0.7;
+    }
+    to {
+      transform: translate(-30px, 26px) scale(1.18);
+      opacity: 0.95;
+    }
+  }
+
+  .grain {
     position: absolute;
-    inset: 0;
-    background-image:
-      linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-    background-size: 56px 56px;
-    mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
-    -webkit-mask-image: radial-gradient(
-      ellipse at center,
-      black 30%,
-      transparent 75%
-    );
+    inset: -50%;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    opacity: 0.06;
+    mix-blend-mode: overlay;
+    animation: grain-shift 6s steps(4) infinite;
+  }
+
+  @keyframes grain-shift {
+    0% {
+      transform: translate(0, 0);
+    }
+    25% {
+      transform: translate(-4%, 3%);
+    }
+    50% {
+      transform: translate(2%, -3%);
+    }
+    75% {
+      transform: translate(-2%, 2%);
+    }
+    100% {
+      transform: translate(0, 0);
+    }
   }
 
   .cta {
@@ -163,9 +226,58 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     transform: scaleX(1);
   }
 
+  .word-pixel {
+    display: inline-block;
+    opacity: 0;
+    animation: enter-pixel 1.50s cubic-bezier(0.16, 1, 0.3, 1) 160ms forwards;
+  }
+
+  .word-journey {
+    display: inline-block;
+    opacity: 0;
+    animation: enter-journey 2s cubic-bezier(0.16, 1, 0.3, 1) 300ms forwards;
+  }
+
+  @keyframes enter-pixel {
+    from {
+      opacity: 0;
+      transform: translateX(-48px) scale(0.84);
+      filter: blur(12px);
+      letter-spacing: -0.06em;
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0) scale(1);
+      filter: blur(0);
+      letter-spacing: normal;
+    }
+  }
+
+  @keyframes enter-journey {
+    from {
+      opacity: 0;
+      transform: translateX(48px) scale(0.84);
+      filter: blur(12px);
+      letter-spacing: -0.06em;
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0) scale(1);
+      filter: blur(0);
+      letter-spacing: normal;
+    }
+  }
+
   @media (prefers-reduced-motion: reduce) {
-    .aurora {
+    .aurora,
+    .grain {
       animation: none;
+    }
+
+    .word-pixel,
+    .word-journey {
+      animation: none;
+      opacity: 1;
     }
   }
 </style>

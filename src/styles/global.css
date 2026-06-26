@@ -25,10 +25,38 @@
 
 /* Título con degradado vertical — identidad visual de PixelJourney. */
 .title-gradient {
-  background: linear-gradient(180deg, #ffffff 0%, #ffffff 55%, #a3a3a3 100%);
+  background: linear-gradient(180deg, #ffffff 0%, #ffffff 55%, #c7d2fe 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+}
+
+/* Acento del título con degradado animado en los colores de Google. */
+.title-accent {
+  background: linear-gradient(
+    100deg,
+    #4285f4 0%,
+    #34a853 28%,
+    #fbbc05 52%,
+    #ea4335 78%,
+    #4285f4 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: title-shift 8s linear infinite;
+}
+
+@keyframes title-shift {
+  to {
+    background-position: 200% center;
+  }
+}
+
+/* Separa el título del fondo cargado para mantener legibilidad. */
+.title-glow {
+  filter: drop-shadow(0 4px 22px rgba(0, 0, 0, 0.6));
 }
 
 /* Accesibilidad: anula el revelado para quien prefiere menos movimiento. */
@@ -36,5 +64,9 @@
   .reveal {
     animation: none;
     opacity: 1;
+  }
+
+  .title-accent {
+    animation: none;
   }
 }
