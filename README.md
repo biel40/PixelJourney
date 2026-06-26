@@ -1,43 +1,62 @@
-# Astro Starter Kit: Minimal
+# PixelJourney
+
+Portfolio de fotografía móvil. Fotos tomadas con dispositivos del día a día, organizadas en álbumes. Incluye un panel de administración privado para subir y gestionar el contenido.
+
+## Stack
+
+| Capa | Tecnología |
+|---|---|
+| Framework | Astro 7 (SSR, `output: 'server'`) |
+| Despliegue | Vercel (adapter + image optimization) |
+| Base de datos | Supabase DB |
+| Almacenamiento | Supabase Storage (bucket `photos`) |
+| Autenticación | Supabase Auth (solo admin) |
+| Estilos | Tailwind CSS v4 |
+| Interactividad | Preact (solo Lightbox) |
+| Lenguaje | TypeScript estricto |
+
+## Estructura
+
+```
+src/
+├── components/
+│   ├── layout/     Header, Footer, Navigation
+│   ├── photo/      PhotoCard, PhotoGrid, AlbumCard, Lightbox
+│   └── ui/         Componentes primitivos sin lógica de dominio
+├── layouts/        BaseLayout, GalleryLayout
+├── lib/            supabase.ts, photos.ts, storage.ts, gallery.ts
+├── middleware/      Guardia de autenticación para /admin/*
+├── pages/          index, gallery/, photo/, admin/
+├── styles/         global.css
+└── types/          photo.ts
+```
+
+## Páginas
+
+| Ruta | Tipo | Descripción |
+|---|---|---|
+| `/` | Estática | Landing page |
+| `/gallery` | SSR | Listado de álbumes |
+| `/gallery/[album]` | SSR | Fotos de un álbum |
+| `/photo/[id]` | SSR | Detalle de foto |
+| `/admin` | SSR + auth | Panel de administración |
+| `/admin/upload` | SSR + auth | Subir fotos |
+| `/admin/photos/[id]/edit` | SSR + auth | Editar metadatos |
+
+## Comandos
 
 ```sh
-npm create astro@latest -- --template minimal
+npm install       # Instala dependencias
+npm run dev       # Servidor local en localhost:4321
+npm run build     # Build de producción en ./dist/
+npm run preview   # Preview del build
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## Variables de entorno
 
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
 ```
-
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
-
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
-
-Any static assets, like images, can be placed in the `public/` directory.
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+SUPABASE_URL
+SUPABASE_ANON_KEY
+SUPABASE_SERVICE_ROLE_KEY   # Solo servidor — nunca exponer al cliente
+PUBLIC_SITE_URL
+```

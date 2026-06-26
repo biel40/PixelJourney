@@ -9,6 +9,10 @@ export const onRequest = defineMiddleware(async ({ request, redirect }, next) =>
     return next();
   }
 
+  // TODO: restore — skips auth when Supabase is not configured
+  const supabaseConfigured = !!import.meta.env.SUPABASE_URL;
+  if (!supabaseConfigured) return next();
+
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) {
