@@ -46,6 +46,7 @@ const largeImages = await Promise.all(
       <h1
         class="reveal mt-2 text-4xl font-bold tracking-tight"
         style="animation-delay: 220ms"
+        transition:name="page-title"
       >
         <span class="title-gradient">Las mejores fotografías</span>
       </h1>
@@ -178,11 +179,13 @@ const largeImages = await Promise.all(
 </style>
 
 <script>
-  const dialog = document.getElementById('lightbox') as HTMLDialogElement | null;
-  const img = document.getElementById('lightbox-img') as HTMLImageElement | null;
-  const closeBtn = document.getElementById('lightbox-close');
+  function initLightbox() {
+    const dialog = document.getElementById('lightbox') as HTMLDialogElement | null;
+    const img = document.getElementById('lightbox-img') as HTMLImageElement | null;
+    const closeBtn = document.getElementById('lightbox-close');
 
-  if (dialog && img) {
+    if (!dialog || !img) return;
+
     document.querySelectorAll<HTMLButtonElement>('[data-lightbox-trigger]').forEach((trigger) => {
       trigger.addEventListener('click', () => {
         img.src = trigger.dataset.large ?? '';
@@ -203,16 +206,18 @@ const largeImages = await Promise.all(
     });
   }
 
-  // Revelado de fotos al entrar en el viewport (API nativa, sin librerías).
-  const revealTargets = document.querySelectorAll<HTMLElement>('.photo-reveal');
-  const prefersReducedMotion = window.matchMedia(
-    '(prefers-reduced-motion: reduce)',
-  ).matches;
+  function initPhotoReveal() {
+    const revealTargets = document.querySelectorAll<HTMLElement>('.photo-reveal');
+    const prefersReducedMotion = window.matchMedia(
+      '(prefers-reduced-motion: reduce)',
+    ).matches;
 
-  if (prefersReducedMotion || !('IntersectionObserver' in window)) {
-    // Sin animación: muestra todo directamente.
-    revealTargets.forEach((el) => el.classList.add('is-visible'));
-  } else {
+    if (prefersReducedMotion || !('IntersectionObserver' in window)) {
+      // Sin animación: muestra todo directamente.
+      revealTargets.forEach((el) => el.classList.add('is-visible'));
+      return;
+    }
+
     const observer = new IntersectionObserver(
       (entries, obs) => {
         entries.forEach((entry) => {
@@ -227,4 +232,12 @@ const largeImages = await Promise.all(
 
     revealTargets.forEach((el) => observer.observe(el));
   }
+
+  // astro:page-load se dispara en la carga inicial y tras cada navegación
+  // con View Transitions, por lo que reinicia el lightbox y el revelado
+  // sobre el DOM recién intercambiado.
+  document.addEventListener('astro:page-load', () => {
+    initLightbox();
+    initPhotoReveal();
+  });
 </script>
