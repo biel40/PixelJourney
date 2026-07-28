@@ -107,3 +107,45 @@
     filter: blur(8px);
   }
 }
+
+/* =========================================================================
+   Morphing de miniatura a visor a pantalla completa. Mientras dura, el
+   documento lleva [data-photo-morph] para sustituir la transición de página
+   por un fundido plano: el protagonismo lo tiene la foto, no el fondo.
+   ========================================================================= */
+html[data-photo-morph]::view-transition-old(root) {
+  animation: morph-root-out 0.3s ease both;
+  filter: none;
+}
+
+html[data-photo-morph]::view-transition-new(root) {
+  animation: morph-root-in 0.3s ease both;
+  filter: none;
+}
+
+@keyframes morph-root-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes morph-root-in {
+  from {
+    opacity: 0;
+  }
+}
+
+::view-transition-group(photo-morph) {
+  animation-duration: 0.42s;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  z-index: 20;
+}
+
+::view-transition-old(photo-morph),
+::view-transition-new(photo-morph) {
+  animation-duration: 0.42s;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  object-fit: cover;
+  height: 100%;
+  width: 100%;
+}

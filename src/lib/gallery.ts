@@ -87,3 +87,12 @@ export async function getGalleryPhotos(): Promise<GalleryPhoto[]> {
   // FASE LOCAL: datos del disco. Sustituir/ramificar aquí en la migración.
   return getLocalGalleryPhotos();
 }
+
+export function formatTakenAt(takenAt: Date | null): string | null {
+  if (!takenAt) return null;
+  return takenAt.toLocaleDateString('es-ES', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  });
+}
