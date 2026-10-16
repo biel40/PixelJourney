@@ -6,7 +6,7 @@ export interface Photo {
   title: string | null;
   description: string | null;
   location: string | null;
-  device: string | null;     // e.g. "iPhone 15 Pro", "Pixel 8 Pro"
+  device: string | null;     // e.g. "OPPO Find X9 Ultra", "Pixel 10 Pro XL"
   takenAt: Date | null;
   album: string;             // slug del álbum, e.g. "landscapes"
   tags: string[];

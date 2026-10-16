@@ -7,8 +7,8 @@ import type { GalleryPhoto } from '../types/photo';
 // Astro las optimiza en build (resize + webp) gracias a astro:assets.
 //
 // Convención de álbumes: el nombre de la SUBCARPETA es el slug del álbum.
-//   assets/photos/PXL_xxx.jpg            -> album "general"
-//   assets/photos/street/PXL_xxx.jpg     -> album "street"
+//   assets/photos/IMG20261015123456.jpg          -> album "general"
+//   assets/photos/street/IMG20261015123456.jpg   -> album "street"
 //
 // MIGRACIÓN A SUPABASE: cuando la DB esté lista, este es el ÚNICO sitio a tocar.
 // Basta con devolver aquí los datos de Supabase mapeados a `GalleryPhoto`
@@ -21,9 +21,13 @@ const modules = import.meta.glob<{ default: ImageMetadata }>(
   { eager: true },
 );
 
-// Extrae la fecha del nombre de archivo de Pixel: PXL_YYYYMMDD_HHMMSS...
+// Extrae la fecha del nombre de archivo de la cámara:
+//   OPPO (ColorOS): IMG20261015123456.jpg     -> IMGYYYYMMDDHHMMSS
+//   Google Pixel:   PXL_20260315_100250557.jpg -> PXL_YYYYMMDD_HHMMSSmmm
+const CAMERA_FILENAME_TIMESTAMP = /(\d{4})(\d{2})(\d{2})_?(\d{2})(\d{2})(\d{2})/;
+
 function parseTakenAt(fileName: string): Date | null {
-  const match = fileName.match(/(\d{4})(\d{2})(\d{2})_(\d{2})(\d{2})(\d{2})/);
+  const match = fileName.match(CAMERA_FILENAME_TIMESTAMP);
   if (!match) return null;
   const [, y, mo, d, h, mi, s] = match;
   const date = new Date(
@@ -51,7 +55,7 @@ function fileNameFromPath(path: string): string {
 }
 
 function buildAlt(album: string, takenAt: Date | null): string {
-  const albumLabel = album === 'general' ? 'PixelJourney' : album;
+  const albumLabel = album === 'general' ? 'FrameJourney' : album;
   if (!takenAt) return `Fotografía del álbum ${albumLabel}`;
   const fecha = takenAt.toLocaleDateString('es-ES', {
     day: 'numeric',

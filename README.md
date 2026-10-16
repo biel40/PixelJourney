@@ -1,6 +1,6 @@
-# PixelJourney
+# FrameJourney
 
-Portfolio de fotografía móvil. Fotos tomadas con dispositivos del día a día, organizadas en álbumes. Incluye un panel de administración privado para subir y gestionar el contenido.
+Portfolio de fotografía móvil. Fotos tomadas con el OPPO Find X9 Ultra (y, en el histórico, con el Google Pixel 10 Pro XL), organizadas en álbumes. Incluye un panel de administración privado para subir y gestionar el contenido.
 
 ## Stack
 

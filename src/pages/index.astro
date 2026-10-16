@@ -4,7 +4,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 ---
 
 <BaseLayout
-  title="PixelJourney"
+  title="FrameJourney"
   description="Fotografía móvil — momentos capturados con dispositivos del día a día."
 >
   <main
@@ -35,7 +35,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
       class="title-glow text-5xl sm:text-6xl md:text-7xl font-bold tracking-tight"
       transition:name="page-title"
     >
-      <span class="title-gradient word-pixel">Pixel</span><span
+      <span class="title-gradient word-frame">Frame</span><span
         class="title-accent word-journey">Journey</span
       >
     </h1>
@@ -67,7 +67,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
         <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
         <circle cx="12" cy="17" r="1"></circle>
       </svg>
-      Photos shot w/Google Pixel 10 Pro XL
+      Photos shot w/OPPO Find X9 Ultra
     </p>
 
     <a
@@ -111,7 +111,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     transform: translateX(-50%);
     background: radial-gradient(
       circle,
-      rgba(66, 133, 244, 0.95),
+      rgba(255, 106, 19, 0.9),
       transparent 72%
     );
     animation: breathe-a 14s ease-in-out infinite alternate;
@@ -124,7 +124,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     height: 560px;
     background: radial-gradient(
       circle,
-      rgba(234, 67, 53, 0.9),
+      rgba(156, 118, 78, 0.9),
       transparent 72%
     );
     animation: breathe-b 18s ease-in-out infinite alternate;
@@ -137,7 +137,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     height: 520px;
     background: radial-gradient(
       circle,
-      rgba(52, 168, 83, 0.9),
+      rgba(140, 200, 230, 0.8),
       transparent 72%
     );
     animation: breathe-c 16s ease-in-out infinite alternate;
@@ -150,7 +150,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     height: 460px;
     background: radial-gradient(
       circle,
-      rgba(251, 188, 5, 0.85),
+      rgba(245, 176, 65, 0.8),
       transparent 72%
     );
     animation: breathe-d 20s ease-in-out infinite alternate;
@@ -252,10 +252,10 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     transform: scaleX(1);
   }
 
-  .word-pixel {
+  .word-frame {
     display: inline-block;
     opacity: 0;
-    animation: enter-pixel 2.5s cubic-bezier(0.16, 1, 0.3, 1) 160ms forwards;
+    animation: enter-frame  2.5s cubic-bezier(0.16, 1, 0.3, 1) 160ms forwards;
   }
 
   .word-journey {
@@ -264,7 +264,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     animation: enter-journey 2.5s cubic-bezier(0.16, 1, 0.3, 1) 300ms forwards;
   }
 
-  @keyframes enter-pixel {
+  @keyframes enter-frame {
     from {
       opacity: 0;
       transform: translateX(-48px) scale(0.84);
@@ -300,7 +300,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
       animation: none;
     }
 
-    .word-pixel,
+    .word-frame,
     .word-journey {
       animation: none;
       opacity: 1;
