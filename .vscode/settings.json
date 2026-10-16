@@ -1,0 +1,8 @@
+{
+    "chat.tools.terminal.autoApprove": {
+        "/^npx astro check$/": {
+            "approve": true,
+            "matchCommandLine": true
+        }
+    }
+}

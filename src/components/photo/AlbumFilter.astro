@@ -1,0 +1,118 @@
+---
+import { ALL_ALBUMS } from '../../lib/albums';
+import type { AlbumSummary } from '../../lib/albums';
+
+interface Props {
+  albums: AlbumSummary[];
+  activeAlbum: string;
+}
+
+const { albums, activeAlbum } = Astro.props;
+
+function hrefFor(slug: string): string {
+  return slug === ALL_ALBUMS ? '/gallery' : `/gallery?album=${slug}`;
+}
+---
+
+<nav class="album-filter" aria-label="Filtrar por álbum">
+  <ul class="flex snap-x snap-mandatory gap-2 overflow-x-auto px-1 py-1 sm:justify-center">
+    {
+      albums.map((album) => (
+        <li class="snap-start">
+          <a
+            href={hrefFor(album.slug)}
+            data-album-filter={album.slug}
+            aria-current={album.slug === activeAlbum ? 'true' : 'false'}
+            class="group flex items-center gap-2 rounded-full border border-white/10 bg-white/3 px-4 py-2 text-sm whitespace-nowrap text-neutral-400 transition-colors duration-200 hover:border-white/25 hover:text-white aria-current:border-white/70 aria-current:bg-white aria-current:text-neutral-950"
+          >
+            {album.label}
+            <span class="font-mono text-[0.7rem] text-neutral-500 tabular-nums transition-colors group-aria-current:text-neutral-500">
+              {album.count}
+            </span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</nav>
+
+<style>
+  .album-filter ul {
+    scrollbar-width: none;
+  }
+
+  .album-filter ul::-webkit-scrollbar {
+    display: none;
+  }
+</style>
+
+<script>
+  import { ALL_ALBUMS } from '../../lib/albums';
+
+  function isInViewport(element: HTMLElement): boolean {
+    const rect = element.getBoundingClientRect();
+    return rect.top < window.innerHeight && rect.bottom > 0;
+  }
+
+  function replayReveal(figures: HTMLElement[]) {
+    figures.forEach((figure) => figure.classList.remove('is-visible'));
+
+    requestAnimationFrame(() =>
+      requestAnimationFrame(() => {
+        figures.forEach((figure) => {
+          if (isInViewport(figure)) figure.classList.add('is-visible');
+        });
+      }),
+    );
+  }
+
+  function syncUrl(slug: string) {
+    const url = new URL(window.location.href);
+
+    if (slug === ALL_ALBUMS) url.searchParams.delete('album');
+    else url.searchParams.set('album', slug);
+
+    window.history.replaceState(null, '', url);
+  }
+
+  function initAlbumFilter() {
+    const chips = [
+      ...document.querySelectorAll<HTMLAnchorElement>('[data-album-filter]'),
+    ];
+    const figures = [...document.querySelectorAll<HTMLElement>('[data-album]')];
+    const counter = document.querySelector<HTMLElement>('[data-photo-count]');
+
+    if (!chips.length) return;
+
+    const applyFilter = (slug: string) => {
+      chips.forEach((chip) =>
+        chip.setAttribute(
+          'aria-current',
+          String(chip.dataset.albumFilter === slug),
+        ),
+      );
+
+      const matching = figures.filter((figure) => {
+        const matches = slug === ALL_ALBUMS || figure.dataset.album === slug;
+        figure.hidden = !matches;
+        return matches;
+      });
+
+      if (counter) {
+        counter.textContent = `${matching.length} ${matching.length === 1 ? 'fotografía' : 'fotografías'}`;
+      }
+
+      replayReveal(matching);
+      syncUrl(slug);
+    };
+
+    chips.forEach((chip) =>
+      chip.addEventListener('click', (event) => {
+        event.preventDefault();
+        applyFilter(chip.dataset.albumFilter ?? ALL_ALBUMS);
+      }),
+    );
+  }
+
+  document.addEventListener('astro:page-load', initAlbumFilter);
+</script>

@@ -27,6 +27,17 @@ export interface GalleryPhoto {
   takenAt: Date | null;
 }
 
+// Imagen ya resuelta a URL, lista para el visor a pantalla completa.
+export interface LightboxSource {
+  id: string;
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
+  albumLabel: string;
+  dateLabel: string | null;
+}
+
 // Fila raw de Supabase — snake_case de la DB
 export interface PhotoRow {
   id: string;

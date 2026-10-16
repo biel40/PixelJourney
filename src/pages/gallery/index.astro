@@ -1,22 +1,51 @@
 ---
-import { Image, getImage } from 'astro:assets';
+import { getImage } from 'astro:assets';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { getGalleryPhotos } from '../../lib/gallery';
+import AlbumFilter from '../../components/photo/AlbumFilter.astro';
+import PhotoGrid from '../../components/photo/PhotoGrid.astro';
+import Lightbox from '../../components/photo/Lightbox';
+import { formatTakenAt, getGalleryPhotos } from '../../lib/gallery';
+import {
+  albumLabel,
+  isInAlbum,
+  resolveActiveAlbum,
+  summarizeAlbums,
+} from '../../lib/albums';
+import type { LightboxSource } from '../../types/photo';
 
 const photos = await getGalleryPhotos();
+const albums = summarizeAlbums(photos);
+const activeAlbum = resolveActiveAlbum(
+  Astro.url.searchParams.get('album'),
+  albums,
+);
+
+const visibleCount = photos.filter((photo) =>
+  isInAlbum(photo, activeAlbum),
+).length;
 
 const largeImages = await Promise.all(
   photos.map((photo) =>
     getImage({ src: photo.src, width: 1600, format: 'webp' }),
   ),
 );
+
+const lightboxSources: LightboxSource[] = photos.map((photo, index) => ({
+  id: photo.id,
+  src: largeImages[index].src,
+  alt: photo.alt,
+  width: photo.src.width,
+  height: photo.src.height,
+  albumLabel: albumLabel(photo.album),
+  dateLabel: formatTakenAt(photo.takenAt),
+}));
 ---
 
 <BaseLayout
   title="Galería"
   description="Colección de fotografías móviles capturadas en el día a día."
 >
-  <main class="relative mx-auto max-w-6xl px-6 py-16">
+  <main class="relative mx-auto max-w-6xl px-4 py-16 sm:px-6">
     <div
       class="pointer-events-none absolute inset-x-0 top-0 -z-10 h-115 overflow-hidden"
       aria-hidden="true"
@@ -24,7 +53,7 @@ const largeImages = await Promise.all(
       <div class="gallery-glow"></div>
     </div>
 
-    <header class="mb-12 text-center">
+    <header class="mb-8 text-center">
       <a
         href="/"
         class="reveal mb-8 inline-flex items-center gap-2 text-sm text-neutral-400 hover:text-white transition-colors"
@@ -53,10 +82,19 @@ const largeImages = await Promise.all(
       <p
         class="reveal mt-3 text-sm text-neutral-400"
         style="animation-delay: 300ms"
+        data-photo-count
       >
-        {photos.length} fotografías
+        {visibleCount} {visibleCount === 1 ? "fotografía" : "fotografías"}
       </p>
     </header>
+
+    {
+      albums.length > 2 && (
+        <div class="reveal mb-10" style="animation-delay: 380ms">
+          <AlbumFilter albums={albums} activeAlbum={activeAlbum} />
+        </div>
+      )
+    }
 
     {
       photos.length === 0 ? (
@@ -64,65 +102,15 @@ const largeImages = await Promise.all(
           Aún no hay fotografías disponibles.
         </p>
       ) : (
-        <div class="columns-1 gap-4 sm:columns-2 lg:columns-3 *:mb-4">
-          {photos.map((photo, index) => (
-            <figure
-              class="photo-reveal break-inside-avoid"
-              style={`transition-delay: ${(index % 6) * 70}ms`}
-            >
-              <button
-                type="button"
-                class="group block w-full cursor-zoom-in overflow-hidden rounded-lg"
-                data-lightbox-trigger
-                data-large={largeImages[index].src}
-                data-alt={photo.alt}
-                aria-label={`Ampliar: ${photo.alt}`}
-              >
-                <Image
-                  src={photo.src}
-                  alt={photo.alt}
-                  widths={[320, 640, 960]}
-                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                  loading={index < 6 ? 'eager' : 'lazy'}
-                  decoding="async"
-                  class="w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
-                />
-              </button>
-            </figure>
-          ))}
-        </div>
+        <PhotoGrid photos={photos} activeAlbum={activeAlbum} />
       )
     }
   </main>
 
-  <dialog
-    id="lightbox"
-    class="m-auto max-h-[90vh] max-w-[92vw] bg-transparent p-0 backdrop:bg-black/80 backdrop:backdrop-blur-sm"
-  >
-    <button
-      type="button"
-      id="lightbox-close"
-      class="absolute right-4 top-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-black/50 text-white transition-colors hover:bg-black/70"
-      aria-label="Cerrar"
-    >
-      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
-      </svg>
-    </button>
-    <img
-      id="lightbox-img"
-      src=""
-      alt=""
-      class="max-h-[90vh] max-w-[92vw] rounded-lg object-contain"
-    />
-  </dialog>
+  <Lightbox client:idle sources={lightboxSources} />
 </BaseLayout>
 
 <style>
-  /* Estilos exclusivos de la galería. Las primitivas compartidas
-     (.reveal, .title-gradient) viven en src/styles/global.css. */
-
-  /* ---- Glow ambiental detrás de la cabecera ---- */
   .gallery-glow {
     position: absolute;
     top: -120px;
@@ -151,93 +139,9 @@ const largeImages = await Promise.all(
     }
   }
 
-  /* ---- Fotos: revelado al entrar en el viewport (scroll) ---- */
-  .photo-reveal {
-    opacity: 0;
-    transform: translateY(24px) scale(0.98);
-    transition:
-      opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
-      transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
-  }
-
-  .photo-reveal.is-visible {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-
-  /* ---- Accesibilidad: respeta a quien prefiere menos movimiento ---- */
   @media (prefers-reduced-motion: reduce) {
     .gallery-glow {
       animation: none;
     }
-    .photo-reveal {
-      opacity: 1;
-      transform: none;
-      transition: none;
-    }
   }
 </style>
-
-<script>
-  function initLightbox() {
-    const dialog = document.getElementById('lightbox') as HTMLDialogElement | null;
-    const img = document.getElementById('lightbox-img') as HTMLImageElement | null;
-    const closeBtn = document.getElementById('lightbox-close');
-
-    if (!dialog || !img) return;
-
-    document.querySelectorAll<HTMLButtonElement>('[data-lightbox-trigger]').forEach((trigger) => {
-      trigger.addEventListener('click', () => {
-        img.src = trigger.dataset.large ?? '';
-        img.alt = trigger.dataset.alt ?? '';
-        dialog.showModal();
-      });
-    });
-
-    // Cerrar al pulsar el botón, la imagen o el fondo (backdrop).
-    closeBtn?.addEventListener('click', () => dialog.close());
-    img.addEventListener('click', () => dialog.close());
-    dialog.addEventListener('click', (event) => {
-      if (event.target === dialog) dialog.close();
-    });
-    // Limpia el src al cerrar para liberar memoria.
-    dialog.addEventListener('close', () => {
-      img.src = '';
-    });
-  }
-
-  function initPhotoReveal() {
-    const revealTargets = document.querySelectorAll<HTMLElement>('.photo-reveal');
-    const prefersReducedMotion = window.matchMedia(
-      '(prefers-reduced-motion: reduce)',
-    ).matches;
-
-    if (prefersReducedMotion || !('IntersectionObserver' in window)) {
-      // Sin animación: muestra todo directamente.
-      revealTargets.forEach((el) => el.classList.add('is-visible'));
-      return;
-    }
-
-    const observer = new IntersectionObserver(
-      (entries, obs) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('is-visible');
-            obs.unobserve(entry.target); // Una sola vez por foto.
-          }
-        });
-      },
-      { rootMargin: '0px 0px -10% 0px', threshold: 0.1 },
-    );
-
-    revealTargets.forEach((el) => observer.observe(el));
-  }
-
-  // astro:page-load se dispara en la carga inicial y tras cada navegación
-  // con View Transitions, por lo que reinicia el lightbox y el revelado
-  // sobre el DOM recién intercambiado.
-  document.addEventListener('astro:page-load', () => {
-    initLightbox();
-    initPhotoReveal();
-  });
-</script>

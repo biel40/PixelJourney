@@ -1,0 +1,127 @@
+---
+import { Image } from 'astro:assets';
+import { isInAlbum } from '../../lib/albums';
+import type { GalleryPhoto } from '../../types/photo';
+
+interface Props {
+  photos: GalleryPhoto[];
+  activeAlbum: string;
+}
+
+const { photos, activeAlbum } = Astro.props;
+---
+
+<div
+  id="photo-grid"
+  class="columns-1 gap-3 *:mb-3 sm:columns-2 sm:gap-4 sm:*:mb-4 lg:columns-3"
+>
+  {
+    photos.map((photo, index) => (
+      <figure
+        class="photo-reveal break-inside-avoid"
+        data-album={photo.album}
+        hidden={!isInAlbum(photo, activeAlbum)}
+        style={`transition-delay: ${(index % 6) * 70}ms`}
+      >
+        <button
+          type="button"
+          class="photo-trigger group relative block w-full cursor-zoom-in overflow-hidden rounded-xl ring-1 ring-white/10 transition-shadow duration-300 hover:ring-white/25 focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:outline-none"
+          data-lightbox-trigger
+          data-photo-id={photo.id}
+          aria-label={`Ampliar: ${photo.alt}`}
+        >
+          <Image
+            src={photo.src}
+            alt={photo.alt}
+            widths={[320, 640, 960]}
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            loading={index < 4 ? 'eager' : 'lazy'}
+            decoding="async"
+            class="w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04]"
+          />
+          <span
+            class="pointer-events-none absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+            aria-hidden="true"
+          />
+        </button>
+      </figure>
+    ))
+  }
+</div>
+
+<style>
+  .photo-reveal {
+    opacity: 0;
+    transform: translateY(24px) scale(0.98);
+    transition:
+      opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .photo-reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  .photo-trigger:active {
+    transform: scale(0.985);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .photo-reveal {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  function visiblePhotoIds(): string[] {
+    return [...document.querySelectorAll<HTMLElement>('[data-photo-id]')]
+      .filter((trigger) => trigger.offsetParent !== null)
+      .map((trigger) => trigger.dataset.photoId ?? '');
+  }
+
+  function initLightboxTriggers() {
+    document
+      .querySelectorAll<HTMLButtonElement>('[data-lightbox-trigger]')
+      .forEach((trigger) => {
+        trigger.addEventListener('click', () => {
+          window.dispatchEvent(
+            new CustomEvent('lightbox:open', {
+              detail: { id: trigger.dataset.photoId, ids: visiblePhotoIds() },
+            }),
+          );
+        });
+      });
+  }
+
+  function initPhotoReveal() {
+    const targets = document.querySelectorAll<HTMLElement>('.photo-reveal');
+    const reducedMotion = window.matchMedia(
+      '(prefers-reduced-motion: reduce)',
+    ).matches;
+
+    if (reducedMotion || !('IntersectionObserver' in window)) {
+      targets.forEach((target) => target.classList.add('is-visible'));
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) entry.target.classList.add('is-visible');
+        });
+      },
+      { rootMargin: '0px 0px -8% 0px', threshold: 0.05 },
+    );
+
+    targets.forEach((target) => observer.observe(target));
+  }
+
+  document.addEventListener('astro:page-load', () => {
+    initLightboxTriggers();
+    initPhotoReveal();
+  });
+</script>
